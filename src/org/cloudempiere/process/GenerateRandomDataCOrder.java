@@ -55,7 +55,7 @@ import org.compiere.util.Util;
  *  @author refactored by Peter Takacs, Cloudempiere
  * 
  */
-public class GenerateTestDataCOrder extends SvrProcess
+public class GenerateRandomDataCOrder extends SvrProcess
 {	
 	public static final int MAX_NO_OF_TRIES = 100;
 	
@@ -129,7 +129,7 @@ public class GenerateTestDataCOrder extends SvrProcess
 			{
 				p_GenMaxNoOfDocumentLines = para[i].getParameterAsInt();
 			}
-			else if (name.equalsIgnoreCase("isUseProductWithQtyAvailable")) {
+			else if (name.equalsIgnoreCase("IsUseProductWithQtyAvailable")) {
 				p_isUseProductWithQtyAvailable = para[i].getParameterAsBoolean();
 			}
 			else if (name.equalsIgnoreCase("IsSOTrx"))

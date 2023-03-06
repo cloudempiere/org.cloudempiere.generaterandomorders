@@ -3,9 +3,10 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Generaterandomorders
 Bundle-SymbolicName: org.cloudempiere.generaterandomorders
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.adempiere.plugin.utils.AdempiereActivator
-Require-Bundle: org.adempiere.base;bundle-version="11.0.0",
- org.adempiere.plugin.utils;bundle-version="11.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
+Service-Component: OSGI-INF/*.xml
+Require-Bundle: org.adempiere.base;bundle-version="10.0.0",
+ org.adempiere.plugin.utils;bundle-version="10.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.adempiere.plugin.utils.Incremental2PackActivator
 Automatic-Module-Name: org.cloudempiere.generaterandomorders
-Service-Component: processfactory.xml
