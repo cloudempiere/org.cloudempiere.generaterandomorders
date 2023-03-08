@@ -320,8 +320,8 @@ public class GenerateRandomDataCOrder extends SvrProcess
 //				if(dt.getDocBaseType().equals(MDocType.DOCBASETYPE_PurchaseOrder))
 //					sql += " JOIN M_Product_PO ppo on ppo.M_Product_ID = p.M_Product_ID ";
 				if(p_isUseProductWithQtyAvailable)
-					sql += " JOIN M_Product_Stock_V ps ON ps.M_Product_ID = p.M_Product_ID ";
-				sql += " WHERE p.IsActive='Y' AND EXISTS (SELECT 1 FROM "
+					sql += " JOIN M_Product_Stock_V ps ON ps.M_Product_ID = p.M_Product_ID AND ps.ProductType = 'I' ";
+				sql += " WHERE p.IsActive='Y' AND p.ProductType = 'I' AND EXISTS (SELECT 1 FROM "
 					+ " M_ProductPrice pp "
 					+ " WHERE pp.M_Product_ID=p.M_Product_ID AND pp.IsActive = 'Y' ";
 					if(p_M_PriceList_Version_ID > 0)
@@ -329,6 +329,10 @@ public class GenerateRandomDataCOrder extends SvrProcess
 					sql += ")"
 				+ " AND p.AD_Client_ID=" + getAD_Client_ID()
 				+ " AND p.C_TaxCategory_ID IS NOT NULL ";
+				if(dt.getDocBaseType().equals(MDocType.DOCBASETYPE_PurchaseOrder))
+					sql += " AND p.IsPurchased='Y'";
+				if(dt.getDocBaseType().equals(MDocType.DOCBASETYPE_SalesOrder))
+					sql += " AND p.IsSold='Y'";
 				if(p_M_Product_Category_ID > 0)		
 					sql += " AND p.M_Product_Category_ID=" + p_M_Product_Category_ID;
 //				if(dt.getDocBaseType().equals(MDocType.DOCBASETYPE_PurchaseOrder))
