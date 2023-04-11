@@ -440,6 +440,8 @@ public class GenerateRandomDataCOrder extends SvrProcess
 			int tries = 0;
 			while(tries < MAX_NO_OF_TRIES) {
 				product = getRandomProduct(0);
+				if(product == null)
+					continue;
 				if(products.size() < noOfLines)
 					noOfLines = products.size();
 				maxQty = calculateMaxQty(product, maxValueOfLine);
@@ -546,6 +548,8 @@ public class GenerateRandomDataCOrder extends SvrProcess
 			int tries = 0;
 			while(tries < MAX_NO_OF_TRIES) {
 				product = getRandomProduct(0);
+				if(product == null)
+					continue;
 				if(products.size() < noOfLines)
 					noOfLines = products.size();
 				maxQty = calculateMaxQty(product, maxValueOfLine);
@@ -580,6 +584,9 @@ public class GenerateRandomDataCOrder extends SvrProcess
 	 * @return MProduct
 	 */
 	private MProduct getRandomProduct(int tries) {
+		
+		if(products.size() <= 0)
+			return null;
 		
 		Integer productId = products.get(random.nextInt(products.size()));
 		MProduct product = MProduct.get(getCtx(), productId);
