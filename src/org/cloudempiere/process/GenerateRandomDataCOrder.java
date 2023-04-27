@@ -193,10 +193,13 @@ public class GenerateRandomDataCOrder extends SvrProcess
 			{
 				createRandomSalesOrder();
 				// Update the user about what is going on
+				String status = "Created " + (i+1) + "/" + p_GenMaxNoOfDocument;
 				if (processUI != null) {
-					String status = "Created " + (i+1) + "/" + p_GenMaxNoOfDocument;
 					processUI.statusUpdate(status);
 				}
+				if((i+1)%10 == 0)
+					saveLog("Sales Orders: " + getProgress(i+1) + " (" + status + ")");
+				
 				noOfGeneratedOrders++;
 			}
 		}
@@ -207,15 +210,31 @@ public class GenerateRandomDataCOrder extends SvrProcess
 			{
 				createRandomPurchaseOrder();
 				// Update the user about what is going on
+				String status = "Created " + (i+1) + "/" + p_GenMaxNoOfDocument;
 				if (processUI != null) {
-					String status = "Created " + (i+1) + "/" + p_GenMaxNoOfDocument;
 					processUI.statusUpdate(status);
 				}
+				if((i+1)%10 == 0)
+					saveLog("Purchase Orders: " + getProgress(i+1) + " (" + status + ")");
+				
 				noOfGeneratedOrders++;
 			}
 		}
-		return "Number Of Generated Orders: " + noOfGeneratedOrders;
+		String returnMsg = "Number Of Generated Orders: " + noOfGeneratedOrders;
+		
+		saveLog(returnMsg);
+		
+		return returnMsg;
 	}	//	doIt
+	
+	/**
+	 * Calculate progress percents
+	 * @param generatedCount
+	 * @return String "[progress] %"
+	 */
+	private String getProgress(int generatedCount) {
+		return (Double.valueOf(generatedCount)/Double.valueOf(p_GenMaxNoOfDocument))*100 + "%";
+	}
 	
 	/**
 	 * Gets BPartners depending on DocBaseType
