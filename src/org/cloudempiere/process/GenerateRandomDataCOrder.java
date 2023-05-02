@@ -198,7 +198,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 					processUI.statusUpdate(status);
 				}
 				if((i+1)%10 == 0)
-					saveLog("Sales Orders: " + getProgress(i+1) + " (" + status + ")");
+					saveLog(0, 0, null, null, "Sales Orders: " + getProgress(i+1) + " (" + status + ")");
 				
 				noOfGeneratedOrders++;
 			}
@@ -215,14 +215,14 @@ public class GenerateRandomDataCOrder extends SvrProcess
 					processUI.statusUpdate(status);
 				}
 				if((i+1)%10 == 0)
-					saveLog("Purchase Orders: " + getProgress(i+1) + " (" + status + ")");
+					saveLog(0, 0, null, null, "Purchase Orders: " + getProgress(i+1) + " (" + status + ")");
 				
 				noOfGeneratedOrders++;
 			}
 		}
 		String returnMsg = "Number Of Generated Orders: " + noOfGeneratedOrders;
 		
-		saveLog(returnMsg);
+		addLog(returnMsg);
 		
 		return returnMsg;
 	}	//	doIt
@@ -512,7 +512,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		addLog(0, null, null, "Order: " + order.getDocumentNo(), MOrder.Table_ID, order.getC_Order_ID());
+		saveLog(0, null, null, "Order: " + order.getDocumentNo(), MOrder.Table_ID, order.getC_Order_ID());
 		
 	}//createRandomSalesOrder
 
@@ -594,7 +594,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		addLog(0, null, null, "Order: " + po.getDocumentNo(), MOrder.Table_ID, po.getC_Order_ID());
+		saveLog(0, null, null, "Order: " + po.getDocumentNo(), MOrder.Table_ID, po.getC_Order_ID());
 	}//createRandomPurchaseOrder
 	
 	/**
