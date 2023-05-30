@@ -202,14 +202,14 @@ public class GenerateRandomDataCOrder extends SvrProcess
 				}
 				if((i+1)%10 == 0) {
 					if(Util.isEmpty(progressLogUU))
-						progressLogUU = saveLog(0, null, null, "Sales Orders: " + getProgress(i+1) + " (" + status + ")");
+						progressLogUU = saveStatus(0, null, null, "Sales Orders: " + getStatusInPercents(i+1) + " (" + status + ")");
 					else
-						updateLog(progressLogUU, 0, null, null, "Sales Orders: " + getProgress(i+1) + " (" + status + ")");
+						updateStatus(progressLogUU, 0, null, null, "Sales Orders: " + getStatusInPercents(i+1) + " (" + status + ")");
 				}
 				noOfGeneratedOrders++;
 			}
 			if(!Util.isEmpty(progressLogUU))
-				updateLog(progressLogUU, 0, null, null, "Sales Orders: " + getProgress(i) + " (" + status + ")");
+				updateStatus(progressLogUU, 0, null, null, "Sales Orders: " + getStatusInPercents(i) + " (" + status + ")");
 		}
 		else if(dt.getDocBaseType().equals(MDocType.DOCBASETYPE_PurchaseOrder)) {
 			// check qty available only when generating SO
@@ -225,14 +225,14 @@ public class GenerateRandomDataCOrder extends SvrProcess
 				}				
 				if((j+1)%10 == 0) {
 					if(Util.isEmpty(progressLogUU))
-						progressLogUU = saveLog(0, null, null, "Purchase Orders: " + getProgress(j+1) + " (" + status + ")");
+						progressLogUU = saveStatus(0, null, null, "Purchase Orders: " + getStatusInPercents(j+1) + " (" + status + ")");
 					else
-						updateLog(progressLogUU, 0, null, null, "Purchase Orders: " + getProgress(j+1) + " (" + status + ")");
+						updateStatus(progressLogUU, 0, null, null, "Purchase Orders: " + getStatusInPercents(j+1) + " (" + status + ")");
 				}
 				noOfGeneratedOrders++;
 			}
 			if(!Util.isEmpty(progressLogUU))
-				updateLog(progressLogUU, 0, null, null, "Purchase Orders: " + getProgress(j) + " (" + status + ")");
+				updateStatus(progressLogUU, 0, null, null, "Purchase Orders: " + getStatusInPercents(j) + " (" + status + ")");
 		}
 		String returnMsg = "Number Of Generated Orders: " + noOfGeneratedOrders;
 		
@@ -246,7 +246,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 	 * @param generatedCount
 	 * @return String "[progress] %"
 	 */
-	private String getProgress(int generatedCount) {
+	private String getStatusInPercents(int generatedCount) {
 		return (Double.valueOf(generatedCount)/Double.valueOf(p_GenMaxNoOfDocument))*100 + "%";
 	}
 	
@@ -526,7 +526,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		saveLog(0, null, null, "Order: " + order.getDocumentNo(), MOrder.Table_ID, order.getC_Order_ID());
+		addLog(0, null, null, "Order: " + order.getDocumentNo(), MOrder.Table_ID, order.getC_Order_ID());
 		
 	}//createRandomSalesOrder
 
@@ -608,7 +608,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		saveLog(0, null, null, "Order: " + po.getDocumentNo(), MOrder.Table_ID, po.getC_Order_ID());
+		addLog(0, null, null, "Order: " + po.getDocumentNo(), MOrder.Table_ID, po.getC_Order_ID());
 	}//createRandomPurchaseOrder
 	
 	/**
