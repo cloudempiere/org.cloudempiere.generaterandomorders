@@ -188,37 +188,51 @@ public class GenerateRandomDataCOrder extends SvrProcess
 		
 		//generate orders
 		int noOfGeneratedOrders = 0;
+		String progressLogUU = "";
+		String status = "Created 0/" + p_GenMaxNoOfDocument;
 		if(dt.getDocBaseType().equals(MDocType.DOCBASETYPE_SalesOrder)) {
-			for ( int i = 0; i < p_GenMaxNoOfDocument; i++ )
+			int i = 0;
+			for ( i = 0; i < p_GenMaxNoOfDocument; i++ )
 			{
 				createRandomSalesOrder();
 				// Update the user about what is going on
-				String status = "Created " + (i+1) + "/" + p_GenMaxNoOfDocument;
+				status = "Created " + (i+1) + "/" + p_GenMaxNoOfDocument;
 				if (processUI != null) {
 					processUI.statusUpdate(status);
 				}
-				if((i+1)%10 == 0)
-					saveLog(0, 0, null, null, "Sales Orders: " + getProgress(i+1) + " (" + status + ")");
-				
+				if((i+1)%10 == 0) {
+					if(Util.isEmpty(progressLogUU))
+						progressLogUU = saveLog(0, null, null, "Sales Orders: " + getProgress(i+1) + " (" + status + ")");
+					else
+						updateLog(progressLogUU, 0, null, null, "Sales Orders: " + getProgress(i+1) + " (" + status + ")");
+				}
 				noOfGeneratedOrders++;
 			}
+			if(!Util.isEmpty(progressLogUU))
+				updateLog(progressLogUU, 0, null, null, "Sales Orders: " + getProgress(i) + " (" + status + ")");
 		}
 		else if(dt.getDocBaseType().equals(MDocType.DOCBASETYPE_PurchaseOrder)) {
 			// check qty available only when generating SO
 			p_isUseProductWithQtyAvailable = false;
-			for ( int i = 0; i < p_GenMaxNoOfDocument; i++ )
+			int j = 0;
+			for ( j = 0; j < p_GenMaxNoOfDocument; j++ )
 			{
 				createRandomPurchaseOrder();
 				// Update the user about what is going on
-				String status = "Created " + (i+1) + "/" + p_GenMaxNoOfDocument;
+				status = "Created " + (j+1) + "/" + p_GenMaxNoOfDocument;
 				if (processUI != null) {
 					processUI.statusUpdate(status);
+				}				
+				if((j+1)%10 == 0) {
+					if(Util.isEmpty(progressLogUU))
+						progressLogUU = saveLog(0, null, null, "Purchase Orders: " + getProgress(j+1) + " (" + status + ")");
+					else
+						updateLog(progressLogUU, 0, null, null, "Purchase Orders: " + getProgress(j+1) + " (" + status + ")");
 				}
-				if((i+1)%10 == 0)
-					saveLog(0, 0, null, null, "Purchase Orders: " + getProgress(i+1) + " (" + status + ")");
-				
 				noOfGeneratedOrders++;
 			}
+			if(!Util.isEmpty(progressLogUU))
+				updateLog(progressLogUU, 0, null, null, "Purchase Orders: " + getProgress(j) + " (" + status + ")");
 		}
 		String returnMsg = "Number Of Generated Orders: " + noOfGeneratedOrders;
 		
