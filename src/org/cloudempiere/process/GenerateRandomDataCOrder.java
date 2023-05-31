@@ -202,14 +202,14 @@ public class GenerateRandomDataCOrder extends SvrProcess
 				}
 				if((i+1)%10 == 0) {
 					if(Util.isEmpty(progressLogUU))
-						progressLogUU = saveStatus(0, null, null, "Sales Orders: " + getStatusInPercents(i+1) + " (" + status + ")");
+						progressLogUU = saveProgress(0, null, null, "Sales Orders: " + getStatusInPercents(i+1) + " (" + status + ")");
 					else
-						updateStatus(progressLogUU, 0, null, null, "Sales Orders: " + getStatusInPercents(i+1) + " (" + status + ")");
+						updateProgress(progressLogUU, 0, null, null, "Sales Orders: " + getStatusInPercents(i+1) + " (" + status + ")");
 				}
 				noOfGeneratedOrders++;
 			}
 			if(!Util.isEmpty(progressLogUU))
-				updateStatus(progressLogUU, 0, null, null, "Sales Orders: " + getStatusInPercents(i) + " (" + status + ")");
+				updateProgress(progressLogUU, 0, null, null, "Sales Orders: " + getStatusInPercents(i) + " (" + status + ")");
 		}
 		else if(dt.getDocBaseType().equals(MDocType.DOCBASETYPE_PurchaseOrder)) {
 			// check qty available only when generating SO
@@ -225,14 +225,14 @@ public class GenerateRandomDataCOrder extends SvrProcess
 				}				
 				if((j+1)%10 == 0) {
 					if(Util.isEmpty(progressLogUU))
-						progressLogUU = saveStatus(0, null, null, "Purchase Orders: " + getStatusInPercents(j+1) + " (" + status + ")");
+						progressLogUU = saveProgress(0, null, null, "Purchase Orders: " + getStatusInPercents(j+1) + " (" + status + ")");
 					else
-						updateStatus(progressLogUU, 0, null, null, "Purchase Orders: " + getStatusInPercents(j+1) + " (" + status + ")");
+						updateProgress(progressLogUU, 0, null, null, "Purchase Orders: " + getStatusInPercents(j+1) + " (" + status + ")");
 				}
 				noOfGeneratedOrders++;
 			}
 			if(!Util.isEmpty(progressLogUU))
-				updateStatus(progressLogUU, 0, null, null, "Purchase Orders: " + getStatusInPercents(j) + " (" + status + ")");
+				updateProgress(progressLogUU, 0, null, null, "Purchase Orders: " + getStatusInPercents(j) + " (" + status + ")");
 		}
 		String returnMsg = "Number Of Generated Orders: " + noOfGeneratedOrders;
 		
