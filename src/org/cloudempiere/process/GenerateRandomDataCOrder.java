@@ -188,34 +188,67 @@ public class GenerateRandomDataCOrder extends SvrProcess
 		
 		//generate orders
 		int noOfGeneratedOrders = 0;
+		String progressLogUU = "";
+		String status = "Created 0/" + p_GenMaxNoOfDocument;
 		if(dt.getDocBaseType().equals(MDocType.DOCBASETYPE_SalesOrder)) {
-			for ( int i = 0; i < p_GenMaxNoOfDocument; i++ )
+			int i = 0;
+			for ( i = 0; i < p_GenMaxNoOfDocument; i++ )
 			{
 				createRandomSalesOrder();
 				// Update the user about what is going on
+				status = "Created " + (i+1) + "/" + p_GenMaxNoOfDocument;
 				if (processUI != null) {
-					String status = "Created " + (i+1) + "/" + p_GenMaxNoOfDocument;
 					processUI.statusUpdate(status);
+				}
+				if((i+1)%10 == 0) {
+					if(Util.isEmpty(progressLogUU))
+						progressLogUU = saveProgress(0, null, null, "Sales Orders: " + getStatusInPercents(i+1) + " (" + status + ")");
+					else
+						updateProgress(progressLogUU, 0, null, null, "Sales Orders: " + getStatusInPercents(i+1) + " (" + status + ")");
 				}
 				noOfGeneratedOrders++;
 			}
+			if(!Util.isEmpty(progressLogUU))
+				updateProgress(progressLogUU, 0, null, null, "Sales Orders: " + getStatusInPercents(i) + " (" + status + ")");
 		}
 		else if(dt.getDocBaseType().equals(MDocType.DOCBASETYPE_PurchaseOrder)) {
 			// check qty available only when generating SO
 			p_isUseProductWithQtyAvailable = false;
-			for ( int i = 0; i < p_GenMaxNoOfDocument; i++ )
+			int j = 0;
+			for ( j = 0; j < p_GenMaxNoOfDocument; j++ )
 			{
 				createRandomPurchaseOrder();
 				// Update the user about what is going on
+				status = "Created " + (j+1) + "/" + p_GenMaxNoOfDocument;
 				if (processUI != null) {
-					String status = "Created " + (i+1) + "/" + p_GenMaxNoOfDocument;
 					processUI.statusUpdate(status);
+				}				
+				if((j+1)%10 == 0) {
+					if(Util.isEmpty(progressLogUU))
+						progressLogUU = saveProgress(0, null, null, "Purchase Orders: " + getStatusInPercents(j+1) + " (" + status + ")");
+					else
+						updateProgress(progressLogUU, 0, null, null, "Purchase Orders: " + getStatusInPercents(j+1) + " (" + status + ")");
 				}
 				noOfGeneratedOrders++;
 			}
+			if(!Util.isEmpty(progressLogUU))
+				updateProgress(progressLogUU, 0, null, null, "Purchase Orders: " + getStatusInPercents(j) + " (" + status + ")");
 		}
-		return "Number Of Generated Orders: " + noOfGeneratedOrders;
+		String returnMsg = "Number Of Generated Orders: " + noOfGeneratedOrders;
+		
+		addLog(returnMsg);
+		
+		return returnMsg;
 	}	//	doIt
+	
+	/**
+	 * Calculate progress percents
+	 * @param generatedCount
+	 * @return String "[progress] %"
+	 */
+	private String getStatusInPercents(int generatedCount) {
+		return (Double.valueOf(generatedCount)/Double.valueOf(p_GenMaxNoOfDocument))*100 + "%";
+	}
 	
 	/**
 	 * Gets BPartners depending on DocBaseType
