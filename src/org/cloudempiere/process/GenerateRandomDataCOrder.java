@@ -591,6 +591,8 @@ public class GenerateRandomDataCOrder extends SvrProcess
 					break;
 				}
 			}
+			if(maxQty <= 0)
+				continue;
 			if(product != null) {
 				poLine.setProduct(product);
 			}
