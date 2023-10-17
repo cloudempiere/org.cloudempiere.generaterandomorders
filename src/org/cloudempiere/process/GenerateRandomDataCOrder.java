@@ -259,7 +259,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 			sql = "SELECT DISTINCT ppo.C_BPartner_ID "
 					+ " FROM M_Product_PO ppo "
 					+ " JOIN M_Product p ON p.M_Product_ID = ppo.M_Product_ID AND p.IsActive='Y' "
-					+ " JOIN C_BPartner bp ON bp.C_BPartner_ID = ppo.C_BPartner_ID "
+					+ " JOIN C_BPartner bp ON (bp.C_BPartner_ID = ppo.C_BPartner_ID AND bp.IsVendor = 'Y') "
 					+ " WHERE ppo.IsActive='Y' "
 //					+ " AND bp.C_TaxGroup_ID IS NOT NULL "
 					+ " AND ppo.AD_Client_ID=? ";
@@ -272,7 +272,8 @@ public class GenerateRandomDataCOrder extends SvrProcess
 					+ " AND bp.AD_Client_ID=? "
 					+ " AND (l.IsShipTo = 'Y' OR l.IsBillTo = 'Y') "
 //					+ " AND bp.C_TaxGroup_ID IS NOT NULL "
-					+ " AND bp.SOCreditStatus != 'S' ";
+					+ " AND bp.SOCreditStatus != 'S' "
+					+ " AND bp.IsCustomer = 'Y' ";
 		}
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
