@@ -64,6 +64,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 	private int 		p_M_Product_Category_ID = 0;
 	private Timestamp	p_Date_From = null;
 	private Timestamp	p_Date_To = null;
+	private String		p_PaymentRule = null;
 	private ArrayList<Integer> bps = new ArrayList<Integer>();
 	private Random random = new Random();
 	private Calendar cal = Calendar.getInstance();
@@ -131,6 +132,9 @@ public class GenerateRandomDataCOrder extends SvrProcess
 			}
 			else if (name.equalsIgnoreCase("IsUseProductWithQtyAvailable")) {
 				p_isUseProductWithQtyAvailable = para[i].getParameterAsBoolean();
+			}
+			else if (name.equalsIgnoreCase("PaymentRule")) {
+				p_PaymentRule = para[i].getParameterAsString();
 			}
 			else if (name.equalsIgnoreCase("IsSOTrx"))
 				;
@@ -458,6 +462,8 @@ public class GenerateRandomDataCOrder extends SvrProcess
 		else {
 			order.setDeliveryViaRule(bp.getDeliveryViaRule());
 		}
+		if(p_PaymentRule != null)
+			order.setPaymentRule(p_PaymentRule);
 		if(!order.save()) {
 			log.info("Could not save Order");
 			return;
@@ -542,11 +548,11 @@ public class GenerateRandomDataCOrder extends SvrProcess
 		
 		po.setAD_Org_ID(p_AD_Org_ID);
 		po.setIsSOTrx(false);
-		if(priceListVersion != null)
-			po.setM_PriceList_ID(priceListVersion.getM_PriceList_ID());
 		po.setC_DocTypeTarget_ID(p_C_DocTypeTarget_ID);
 		po.setC_DocType_ID(p_C_DocTypeTarget_ID);
 		po.setBPartner(bp);
+		if(priceListVersion != null)
+			po.setM_PriceList_ID(priceListVersion.getM_PriceList_ID());
 		po.setPriorityRule("5");
 		int salesRep_ID = p_SalesRep_ID;
 		if (salesRep_ID <= 0)
@@ -565,7 +571,8 @@ public class GenerateRandomDataCOrder extends SvrProcess
 		else {
 			po.setDeliveryViaRule(bp.getDeliveryViaRule());
 		}
-		
+		if(p_PaymentRule != null)
+			po.setPaymentRule(p_PaymentRule);
 		if(!po.save()) {
 			log.info("Could not save Order");
 			return;
