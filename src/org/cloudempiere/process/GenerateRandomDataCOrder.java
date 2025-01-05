@@ -77,7 +77,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 	private int p_AD_Org_ID = 0;
 	private int p_M_Warehouse_ID = 0;
 	private String p_DocAction = MOrder.DOCACTION_Complete;
-	private BigDecimal p_MaxValue = new BigDecimal(1000);
+	private BigDecimal p_MaxValue = null;
 	private boolean p_isUseProductWithQtyAvailable = false;
 	private int p_GenMaxNoOfDocumentLines = 10;
 	private MPriceListVersion priceListVersion;
@@ -142,7 +142,9 @@ public class GenerateRandomDataCOrder extends SvrProcess
 				MProcessPara.validateUnknownParameter(getProcessInfo().getAD_Process_ID(), para[i]);
 			
 			description = "Test Data (" + new MPInstance(getCtx(), getAD_PInstance_ID(), null).getCreated() + ")";
-		}		
+		}
+		if (p_MaxValue == null || p_MaxValue.signum() <= 0)
+			p_MaxValue = BigDecimal.valueOf(1000.0 * p_GenMaxNoOfDocumentLines);
 	}	//	prepare
 
 	/**
@@ -479,11 +481,13 @@ public class GenerateRandomDataCOrder extends SvrProcess
 			
 			int tries = 0;
 			while(tries < MAX_NO_OF_TRIES) {
-				product = getRandomProduct(0);
-				if(product == null)
-					continue;
+				product = getRandomProduct();
 				if(products.size() < noOfLines)
 					noOfLines = products.size();
+				if(products.size() == 0)
+					break;
+				if(product == null)
+					continue;
 				maxQty = calculateMaxQty(product, maxValueOfLine);
 				tries++;
 				if(maxQty > 0) {
@@ -499,6 +503,8 @@ public class GenerateRandomDataCOrder extends SvrProcess
 			if(!ol.save())
 				log.info("Could not save OrderLine");
 		}
+		if (order.getLines().length == 0)
+			throw new AdempiereException("SO without lines, maybe increase the Max Value (" + p_MaxValue + ") or decrease the number of lines ("+p_GenMaxNoOfDocumentLines+")");
 
 		MDocType dt = MDocType.get(getCtx(), p_C_DocTypeTarget_ID);
 		
@@ -588,11 +594,13 @@ public class GenerateRandomDataCOrder extends SvrProcess
 			
 			int tries = 0;
 			while(tries < MAX_NO_OF_TRIES) {
-				product = getRandomProduct(0);
-				if(product == null)
-					continue;
+				product = getRandomProduct();
 				if(products.size() < noOfLines)
 					noOfLines = products.size();
+				if(products.size() == 0)
+					break;
+				if(product == null)
+					continue;
 				maxQty = calculateMaxQty(product, maxValueOfLine);
 				tries++;
 				if(maxQty > 0) {
@@ -603,11 +611,15 @@ public class GenerateRandomDataCOrder extends SvrProcess
 				continue;
 			if(product != null) {
 				poLine.setProduct(product);
+			} else {
+				break;
 			}
 			poLine.setQty(new BigDecimal(random.nextInt(maxQty)+1));
 			if(!poLine.save())
 				log.info("Could not save OrderLine");
 		}
+		if (po.getLines().length == 0)
+			throw new AdempiereException("PO without lines, maybe increase the Max Value (" + p_MaxValue + ") or decrease the number of lines ("+p_GenMaxNoOfDocumentLines+")");
 		po.setDocAction(p_DocAction);
 		po.processIt(p_DocAction);
 		if(!po.save())
@@ -626,7 +638,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 	 * @param tries
 	 * @return MProduct
 	 */
-	private MProduct getRandomProduct(int tries) {
+	private MProduct getRandomProduct() {
 		
 		if(products.size() <= 0)
 			return null;
@@ -640,8 +652,7 @@ public class GenerateRandomDataCOrder extends SvrProcess
 				productQtys.remove(index);
 			return product;
 		}
-		else
-			return getRandomProduct(tries + 1);
+		return null;
 	}
 
 	/**
