@@ -565,8 +565,10 @@ public class GenerateRandomDataCOrder extends SvrProcess
 			salesRep_ID = getRandomSalesRepID();
 		po.setSalesRep_ID(salesRep_ID);
 		po.setM_Warehouse_ID(p_M_Warehouse_ID);
-		
-		long addTime = Math.abs(random.nextLong()) % duration;
+
+		long addTime = 0;
+		if (duration != 0)
+			addTime = Math.abs(random.nextLong()) % duration;
 		Timestamp date = new Timestamp(p_Date_From.getTime() + addTime);
 		po.setDateOrdered(date);
 		po.setDatePromised(date);
