@@ -444,8 +444,10 @@ public class GenerateRandomDataCOrder extends SvrProcess
 		order.setAD_Org_ID(p_AD_Org_ID);
 		if(priceListVersion != null)
 			order.setM_PriceList_ID(priceListVersion.getM_PriceList_ID());
-		long addTime = Math.abs(random.nextLong()) % duration;
-		
+
+		long addTime = 0;
+		if (duration != 0)
+			addTime = Math.abs(random.nextLong()) % duration;
 		Timestamp date = new Timestamp(p_Date_From.getTime() + addTime);
 		order.setDateOrdered(date);
 		order.setDateAcct(date);
